@@ -2,9 +2,32 @@
 <html>
   <head>
     <title>Azure Portfolio</title>
+    <meta charset="utf-8" />
   </head>
   <body>
     <h1>Azure Static Web App</h1>
     <p>This site is deployed using Azure Static Web Apps (Free).</p>
+
+    <h2>Backend API Status</h2>
+    <div id="api-status">Checking API...</div>
+
+    <script>
+      async function checkApi() {
+        try {
+          const response = await fetch("/api/healthcheck");
+          const data = await response.json();
+
+          document.getElementById("api-status").innerHTML =
+            "<strong>Status:</strong> " + data.status + "<br/>" +
+            "<strong>Message:</strong> " + data.message;
+        } catch (error) {
+          document.getElementById("api-status").innerText =
+            "Error contacting API";
+        }
+      }
+
+      checkApi();
+    </script>
   </body>
 </html>
+
