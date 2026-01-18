@@ -2,10 +2,12 @@ const sql = require("mssql");
 
 module.exports = async function (context, req) {
   try {
-    // Connect to Azure SQL using the app setting
+    context.log("Connecting to SQL...");
+
     const pool = await sql.connect(process.env.SQL_CONNECTION_STRING);
 
-    // Query the Messages table
+    context.log("Connected. Running query...");
+
     const result = await pool
       .request()
       .query(
@@ -17,12 +19,13 @@ module.exports = async function (context, req) {
       body: result.recordset
     };
   } catch (error) {
+    context.log("SQL ERROR:", error);
+
     context.res = {
       status: 500,
       body: {
-        error: "Database query failed"
+        error: error.message
       }
     };
   }
 };
-
